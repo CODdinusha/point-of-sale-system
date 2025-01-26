@@ -31,8 +31,10 @@ public class CustomerController {
         return updated;
     }
 
-
-
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public CustomerDTO getCustomerById(@PathVariable("id") int id) {
+        return  customerService.getCustomerById(id);
+    }
 
 
 

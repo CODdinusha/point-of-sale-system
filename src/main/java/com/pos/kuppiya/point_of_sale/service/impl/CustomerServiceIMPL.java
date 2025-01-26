@@ -1,14 +1,18 @@
 package com.pos.kuppiya.point_of_sale.service.impl;
 
+import aj.org.objectweb.asm.commons.Remapper;
+import com.pos.kuppiya.point_of_sale.dto.CustomerDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerSaveRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerUpdateRequestDTO;
 import com.pos.kuppiya.point_of_sale.entity.Customer;
 import com.pos.kuppiya.point_of_sale.repo.CustomerRepo;
 import com.pos.kuppiya.point_of_sale.service.CustomerService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,7 +21,8 @@ public class CustomerServiceIMPL implements CustomerService {
 @Autowired
     private CustomerRepo customerRepo;
 
-
+@Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public String addCustomer(CustomerSaveRequestDTO customerSaveRequestDTO) {
@@ -60,6 +65,32 @@ public class CustomerServiceIMPL implements CustomerService {
         customerRepo.save(customer1);
 
         return "Updated succes.";
+    }
+
+    @Override
+    public CustomerDTO getCustomerById(int id) {
+        Optional<Customer> customer = customerRepo.findById(id);
+        if(customer.isPresent()){
+//            CustomerDTO customerDTO = new CustomerDTO(
+//
+//                    customer.get().getCustomerId(),
+//                    customer.get().getCustomerName(),
+//                    customer.get().getCustomerAddress(),
+//                    customer.get().getSalary(),
+//                    customer.get().getContactNumbers(),
+//                    customer.get().getActiveState(),
+//                    customer.get().getNic()
+//
+//            );
+//            return customerDTO;
+
+
+            CustomerDTO customerDTO = modelMapper.map(customer.get(),CustomerDTO.class);
+            return customerDTO;
+        }else {
+            System.out.println("not available");
+        }
+        return null;
     }
 
 }
