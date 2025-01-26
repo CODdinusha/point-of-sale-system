@@ -8,6 +8,7 @@ import com.pos.kuppiya.point_of_sale.entity.Customer;
 import com.pos.kuppiya.point_of_sale.repo.CustomerRepo;
 import com.pos.kuppiya.point_of_sale.service.CustomerService;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -91,6 +92,16 @@ public class CustomerServiceIMPL implements CustomerService {
             System.out.println("not available");
         }
         return null;
+    }
+
+    @Override
+    public List<CustomerDTO> getAllCustomers() {
+        List<Customer>getCustomers = customerRepo.findAll();
+        List<CustomerDTO>customerDTOList = new ArrayList<>();
+
+        List<CustomerDTO> customerDTOS=modelMapper.
+                map(getCustomers,new TypeToken<List<CustomerDTO>>(){}.getType());
+        return customerDTOS;
     }
 
 }

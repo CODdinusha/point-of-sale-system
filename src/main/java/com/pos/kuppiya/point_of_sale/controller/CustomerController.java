@@ -8,6 +8,8 @@ import com.pos.kuppiya.point_of_sale.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/customer")
@@ -36,6 +38,12 @@ public class CustomerController {
         return  customerService.getCustomerById(id);
     }
 
-
+    @GetMapping(
+            path = {"/get-all-customers"}
+    )
+    public List<CustomerDTO> getAllCustomer(){
+        List<CustomerDTO> allCustomers=customerService.getAllCustomers();
+        return allCustomers;
+    }
 
 }
