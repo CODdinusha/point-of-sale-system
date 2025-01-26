@@ -19,12 +19,10 @@ public class CustomerController {
     private CustomerService customerService;
 
 
-
     @PostMapping(path = "/save")
-    public String saveCustomer(@RequestBody CustomerSaveRequestDTO customerSaveRequestDTO){
-        return customerService. addCustomer(customerSaveRequestDTO);
+    public String saveCustomer(@RequestBody CustomerSaveRequestDTO customerSaveRequestDTO) {
+        return customerService.addCustomer(customerSaveRequestDTO);
     }
-
 
 
     @PutMapping(path = "/update")
@@ -35,15 +33,22 @@ public class CustomerController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public CustomerDTO getCustomerById(@PathVariable("id") int id) {
-        return  customerService.getCustomerById(id);
+        return customerService.getCustomerById(id);
     }
 
     @GetMapping(
             path = {"/get-all-customers"}
     )
-    public List<CustomerDTO> getAllCustomer(){
-        List<CustomerDTO> allCustomers=customerService.getAllCustomers();
+    public List<CustomerDTO> getAllCustomer() {
+        List<CustomerDTO> allCustomers = customerService.getAllCustomers();
         return allCustomers;
     }
+    @DeleteMapping(path = {"/delete-customer/{id}"}
+    )
+    public String deleteCustomer(@PathVariable(value = "id") int id){
+        boolean deletedCustomer = customerService.deleteCustomer();
+        return "Deleted";
+    }
+
 
 }

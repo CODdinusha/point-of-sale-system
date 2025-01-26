@@ -1,6 +1,5 @@
 package com.pos.kuppiya.point_of_sale.service.impl;
 
-import aj.org.objectweb.asm.commons.Remapper;
 import com.pos.kuppiya.point_of_sale.dto.CustomerDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerSaveRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerUpdateRequestDTO;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -103,6 +103,20 @@ public class CustomerServiceIMPL implements CustomerService {
                 map(getCustomers,new TypeToken<List<CustomerDTO>>(){}.getType());
         return customerDTOS;
     }
+
+
+
+
+    @Override
+    public boolean deleteCustomerById(int id) throws ClassNotFoundException {
+        if(customerRepo.existsById(id)){
+            customerRepo.deleteById(id);
+        }else {
+            throw new ClassNotFoundException("not found");
+        }
+        return false;
+    }
+
 
 }
 
