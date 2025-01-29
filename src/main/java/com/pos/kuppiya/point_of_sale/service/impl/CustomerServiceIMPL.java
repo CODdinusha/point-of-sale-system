@@ -1,5 +1,4 @@
 package com.pos.kuppiya.point_of_sale.service.impl;
-
 import com.pos.kuppiya.point_of_sale.dto.CustomerDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerSaveRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerUpdateRequestDTO;
@@ -12,17 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CustomerServiceIMPL implements CustomerService {
 
-@Autowired
+    @Autowired
     private CustomerRepo customerRepo;
 
-@Autowired
+    @Autowired
     private ModelMapper modelMapper;
 
     @Override
@@ -36,12 +34,10 @@ public class CustomerServiceIMPL implements CustomerService {
         customer.setNic(customerSaveRequestDTO.getNic());
 
 
-
-        if(!customerRepo.existsById(customer.getCustomerId())){
+        if (!customerRepo.existsById(customer.getCustomerId())) {
             customerRepo.save(customer);
-            return customer.getCustomerName()+"saved";
-        }
-       else {
+            return customer.getCustomerName() + "saved";
+        } else {
             System.out.println("Name allready exist ");
             return "Name allready exist ";
         }
@@ -71,24 +67,10 @@ public class CustomerServiceIMPL implements CustomerService {
     @Override
     public CustomerDTO getCustomerById(int id) {
         Optional<Customer> customer = customerRepo.findById(id);
-        if(customer.isPresent()){
-//            CustomerDTO customerDTO = new CustomerDTO(
-//
-//                    customer.get().getCustomerId(),
-//                    customer.get().getCustomerName(),
-//                    customer.get().getCustomerAddress(),
-//                    customer.get().getSalary(),
-//                    customer.get().getContactNumbers(),
-//                    customer.get().getActiveState(),
-//                    customer.get().getNic()
-//
-//            );
-//            return customerDTO;
-
-
-            CustomerDTO customerDTO = modelMapper.map(customer.get(),CustomerDTO.class);
+        if (customer.isPresent()) {
+            CustomerDTO customerDTO = modelMapper.map(customer.get(), CustomerDTO.class);
             return customerDTO;
-        }else {
+        } else {
             System.out.println("not available");
         }
         return null;
@@ -96,27 +78,24 @@ public class CustomerServiceIMPL implements CustomerService {
 
     @Override
     public List<CustomerDTO> getAllCustomers() {
-        List<Customer>getCustomers = customerRepo.findAll();
-        List<CustomerDTO>customerDTOList = new ArrayList<>();
+        List<Customer> getCustomers = customerRepo.findAll();
+        List<CustomerDTO> customerDTOList = new ArrayList<>();
 
-        List<CustomerDTO> customerDTOS=modelMapper.
-                map(getCustomers,new TypeToken<List<CustomerDTO>>(){}.getType());
+        List<CustomerDTO> customerDTOS = modelMapper.
+                map(getCustomers, new TypeToken<List<CustomerDTO>>() {
+                }.getType());
         return customerDTOS;
     }
 
-
-
-
     @Override
-    public boolean deleteCustomerById(int id) throws ClassNotFoundException {
-        if(customerRepo.existsById(id)){
+    public String deleteCustomer(int id) {
+        if (customerRepo.existsById(id)) {
             customerRepo.deleteById(id);
-        }else {
-            throw new ClassNotFoundException("not found");
+            return "Customer with ID " + id + " has been deleted successfully.";
+        } else {
+            return "Customer with ID " + id + " not found. Cannot delete.";
         }
-        return false;
     }
-
-
 }
+
 

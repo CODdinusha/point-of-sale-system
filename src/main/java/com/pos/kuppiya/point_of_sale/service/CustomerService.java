@@ -17,9 +17,8 @@ public interface CustomerService {
 
     List<CustomerDTO> getAllCustomers();
 
-    boolean deleteCustomer();
-
-    boolean deleteCustomer(int id) throws ClassNotFoundException;
-
-    boolean deleteCustomerById(int id) throws ClassNotFoundException;
+    String deleteCustomer(int id);
 }
+
+
+

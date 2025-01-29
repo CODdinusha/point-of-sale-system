@@ -43,12 +43,12 @@ public class CustomerController {
         List<CustomerDTO> allCustomers = customerService.getAllCustomers();
         return allCustomers;
     }
-    @DeleteMapping(path = {"/delete-customer/{id}"}
-    )
-    public String deleteCustomer(@PathVariable(value = "id") int id){
-        boolean deletedCustomer = customerService.deleteCustomer();
-        return "Deleted";
-    }
+
+    @DeleteMapping(path = "/delete-customer/{id}")
+        public String deleteCustomer(@PathVariable("id") int id) {
+        return customerService.deleteCustomer(id);
+}
+
 
 
 }
