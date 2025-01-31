@@ -18,6 +18,8 @@ public interface CustomerService {
     List<CustomerDTO> getAllCustomers();
 
     String deleteCustomer(int id);
+
+    List<CustomerDTO> getByName(String customerName) throws ClassNotFoundException;
 }
 
 

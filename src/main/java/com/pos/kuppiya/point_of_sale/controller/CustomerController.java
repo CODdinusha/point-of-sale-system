@@ -49,6 +49,13 @@ public class CustomerController {
         return customerService.deleteCustomer(id);
 }
 
-
+    @GetMapping(
+            path = {"/get-by-name"},
+            params = {"name"}
+    )
+    public List<CustomerDTO> getCustomerByName(@RequestParam(value = "name") String customerName) throws ClassNotFoundException {
+        List<CustomerDTO> getCustomer = customerService.getByName(customerName);
+        return getCustomer;
+    }
 
 }
