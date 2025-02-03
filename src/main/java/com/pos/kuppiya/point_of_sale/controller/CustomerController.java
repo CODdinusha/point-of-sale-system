@@ -4,6 +4,7 @@ package com.pos.kuppiya.point_of_sale.controller;
 import com.pos.kuppiya.point_of_sale.dto.CustomerDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerSaveRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerUpdateRequestDTO;
+//import com.pos.kuppiya.point_of_sale.dto.response.ResposeActiveCustomerDTO;
 import com.pos.kuppiya.point_of_sale.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -57,5 +58,19 @@ public class CustomerController {
         List<CustomerDTO> getCustomer = customerService.getByName(customerName);
         return getCustomer;
     }
+    @GetMapping(
+            path = {"/get-by-active-states"}
+    )
+    public List<CustomerDTO> getCustomerByActiveState()throws ClassNotFoundException{
+        List<CustomerDTO> getCustomer = customerService.getAllCustomerByActiveState();
+        return getCustomer;
+    }
+//    @GetMapping(
+//            path = {"/get-by-active-states-only-name"}
+//    )
+//    public List<ResposeActiveCustomerDTO> getCustomerByActiveStateOnlyName()throws ClassNotFoundException{
+//        List<ResposeActiveCustomerDTO> getCustomer = customerService.getAllCustomerByActiveStateOnlyName();
+//        return getCustomer;
+//    }
 
 }

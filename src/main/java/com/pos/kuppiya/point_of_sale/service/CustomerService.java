@@ -3,6 +3,7 @@ package com.pos.kuppiya.point_of_sale.service;
 import com.pos.kuppiya.point_of_sale.dto.CustomerDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerSaveRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerUpdateRequestDTO;
+//import com.pos.kuppiya.point_of_sale.dto.response.ResposeActiveCustomerDTO;
 
 import java.util.List;
 
@@ -20,6 +21,11 @@ public interface CustomerService {
     String deleteCustomer(int id);
 
     List<CustomerDTO> getByName(String customerName) throws ClassNotFoundException;
+
+
+    List<CustomerDTO> getAllCustomerByActiveState() throws ClassNotFoundException;
+
+//    List<ResposeActiveCustomerDTO> getAllCustomerByActiveStateOnlyName()throws ClassNotFoundException;
 }
 
 

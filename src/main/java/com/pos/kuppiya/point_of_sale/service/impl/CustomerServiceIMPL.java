@@ -2,9 +2,11 @@ package com.pos.kuppiya.point_of_sale.service.impl;
 import com.pos.kuppiya.point_of_sale.dto.CustomerDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerSaveRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerUpdateRequestDTO;
+//import com.pos.kuppiya.point_of_sale.dto.response.ResposeActiveCustomerDTO;
 import com.pos.kuppiya.point_of_sale.entity.Customer;
 import com.pos.kuppiya.point_of_sale.repo.CustomerRepo;
 import com.pos.kuppiya.point_of_sale.service.CustomerService;
+import com.pos.kuppiya.point_of_sale.util.mappers.CustomerMapper;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class CustomerServiceIMPL implements CustomerService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private CustomerMapper customerMapper;
 
     @Override
     public String addCustomer(CustomerSaveRequestDTO customerSaveRequestDTO) {
@@ -61,14 +66,15 @@ public class CustomerServiceIMPL implements CustomerService {
 
         customerRepo.save(customer1);
 
-        return "Updated succes.";
+        return "Updated success.";
     }
 
     @Override
     public CustomerDTO getCustomerById(int id) {
         Optional<Customer> customer = customerRepo.findById(id);
         if (customer.isPresent()) {
-            CustomerDTO customerDTO = modelMapper.map(customer.get(), CustomerDTO.class);
+//            CustomerDTO customerDTO = modelMapper.map(customer.get(), CustomerDTO.class);
+            CustomerDTO customerDTO = customerMapper.entityToDto(customer.get());
             return customerDTO;
         } else {
             System.out.println("not available");
@@ -80,6 +86,20 @@ public class CustomerServiceIMPL implements CustomerService {
     public List<CustomerDTO> getAllCustomers() {
         List<Customer> getCustomers = customerRepo.findAll();
         List<CustomerDTO> customerDTOList = new ArrayList<>();
+
+//        for(Customer c: getCustomers){
+//            CustomerDTO customerDTO = new CustomerDTO(
+//                    c.getCustomerId(),
+//                    c.getCustomerName(),
+//                    c.getCustomerAddress(),
+//                    c.getSalary(),
+//                    c.getContactNumbers(),
+//                    c.getActiveState(),
+//                    c.getNic()
+//
+//            );
+//            customerDTOList.add(customerDTO);
+//        }
 
         List<CustomerDTO> customerDTOS = modelMapper.
                 map(getCustomers, new TypeToken<List<CustomerDTO>>() {
@@ -112,6 +132,32 @@ public class CustomerServiceIMPL implements CustomerService {
         }
 
     }
+
+    @Override
+    public List<CustomerDTO> getAllCustomerByActiveState() throws ClassNotFoundException {
+        List<Customer>customers = customerRepo.findAllByActiveStateEquals(true);
+        if(customers.size()!=0){
+            List<CustomerDTO> customerDTOS = customerMapper.entityListToDtoList(customers);
+
+            return customerDTOS;
+        }else{
+            throw new ClassNotFoundException("No Active Customer Found");
+        }
+
+    }
+
+//    @Override
+//    public List<ResposeActiveCustomerDTO> getAllCustomerByActiveStateOnlyName() throws ClassNotFoundException {
+//        List<Customer>customers = customerRepo.findAllByActiveStateEquals(true);
+//        if(customers.size()!=0){
+//            List<ResposeActiveCustomerDTO> customerDTOS = customerMapper.entityListToDtoList(customers);
+//
+//            return customerDTOS;
+//        }else{
+//            throw new ClassNotFoundException("No Active Customer Found");
+//        }
+
+
 }
 
 
