@@ -2,7 +2,7 @@ package com.pos.kuppiya.point_of_sale.service.impl;
 import com.pos.kuppiya.point_of_sale.dto.CustomerDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerSaveRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerUpdateRequestDTO;
-//import com.pos.kuppiya.point_of_sale.dto.response.ResposeActiveCustomerDTO;
+import com.pos.kuppiya.point_of_sale.dto.response.ResposeActiveCustomerDTO;
 import com.pos.kuppiya.point_of_sale.entity.Customer;
 import com.pos.kuppiya.point_of_sale.repo.CustomerRepo;
 import com.pos.kuppiya.point_of_sale.service.CustomerService;
@@ -150,12 +150,25 @@ public class CustomerServiceIMPL implements CustomerService {
 //    public List<ResposeActiveCustomerDTO> getAllCustomerByActiveStateOnlyName() throws ClassNotFoundException {
 //        List<Customer>customers = customerRepo.findAllByActiveStateEquals(true);
 //        if(customers.size()!=0){
-//            List<ResposeActiveCustomerDTO> customerDTOS = customerMapper.entityListToDtoList(customers);
+//            List<ResposeActiveCustomerDTO> customerDTOS = customerMapper.entityListToDtoListOnlyName(customers);
 //
 //            return customerDTOS;
 //        }else{
 //            throw new ClassNotFoundException("No Active Customer Found");
 //        }
+//    }
+@Override
+public List<ResposeActiveCustomerDTO> getAllCustomerByActiveStateOnlyName() throws ClassNotFoundException {
+    List<Customer> customers = customerRepo.findAllByActiveStateEquals(true);
+    if (!customers.isEmpty()) {
+        return customers.stream()
+                .map(customer -> new ResposeActiveCustomerDTO(customer.getCustomerName(), customer.getContactNumbers()))
+                .toList();
+    } else {
+        throw new ClassNotFoundException("No Active Customer Found");
+    }
+}
+
 
 
 }
