@@ -1,5 +1,6 @@
 package com.pos.kuppiya.point_of_sale.service.impl;
 import com.pos.kuppiya.point_of_sale.dto.CustomerDTO;
+import com.pos.kuppiya.point_of_sale.dto.request.CostomerUpdateQueryRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerSaveRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerUpdateRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.response.ResposeActiveCustomerDTO;
@@ -7,6 +8,7 @@ import com.pos.kuppiya.point_of_sale.entity.Customer;
 import com.pos.kuppiya.point_of_sale.repo.CustomerRepo;
 import com.pos.kuppiya.point_of_sale.service.CustomerService;
 import com.pos.kuppiya.point_of_sale.util.mappers.CustomerMapper;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,31 +148,53 @@ public class CustomerServiceIMPL implements CustomerService {
 
     }
 
+    @Override
+        public List<ResposeActiveCustomerDTO> getAllCustomerByActiveStateOnlyName() throws ClassNotFoundException {
+            List<Customer> customers = customerRepo.findAllByActiveStateEquals(true);
+            if (!customers.isEmpty()) {
+                return customers.stream()
+                        .map(customer -> new ResposeActiveCustomerDTO(customer.getCustomerName(), customer.getContactNumbers()))
+                        .toList();
+            } else {
+                throw new ClassNotFoundException("No Active Customer Found");
+            }
+
+        }
+
 //    @Override
-//    public List<ResposeActiveCustomerDTO> getAllCustomerByActiveStateOnlyName() throws ClassNotFoundException {
-//        List<Customer>customers = customerRepo.findAllByActiveStateEquals(true);
-//        if(customers.size()!=0){
-//            List<ResposeActiveCustomerDTO> customerDTOS = customerMapper.entityListToDtoListOnlyName(customers);
-//
-//            return customerDTOS;
-//        }else{
-//            throw new ClassNotFoundException("No Active Customer Found");
+//    @Transactional
+//    public String updateCustomerByQuery(CostomerUpdateQueryRequestDTO customerUpdateQueryRequestDTO, int id) {
+//        if(customerRepo.existsById(id)){
+//            customerRepo.updateCustomerByQuery(customerUpdateQueryRequestDTO.getCustomerName(),customerUpdateQueryRequestDTO.getNic(),id);
 //        }
+//        return null;
 //    }
-@Override
-public List<ResposeActiveCustomerDTO> getAllCustomerByActiveStateOnlyName() throws ClassNotFoundException {
-    List<Customer> customers = customerRepo.findAllByActiveStateEquals(true);
-    if (!customers.isEmpty()) {
-        return customers.stream()
-                .map(customer -> new ResposeActiveCustomerDTO(customer.getCustomerName(), customer.getContactNumbers()))
-                .toList();
-    } else {
-        throw new ClassNotFoundException("No Active Customer Found");
+
+        @Override
+        @Transactional
+        public String updateCustomerByQuery(CostomerUpdateQueryRequestDTO customerUpdateQueryRequestDTO, int id) {
+            if (customerRepo.existsById(id)) {
+                customerRepo.updateCustomerByQuery(customerUpdateQueryRequestDTO.getCustomerName(), customerUpdateQueryRequestDTO.getNic(), id);
+                return "Customer updated successfully";
+            } else {
+                return "Customer not found";
+            }
+        }
     }
-}
+
+//        @Override
+//        @Transactional
+//        public String updateCustomerByQuery(CostomerUpdateQueryRequestDTO customerUpdateQueryRequestDTO, int id) {
+//            if (customerRepo.existsById(id)) {
+//                customerRepo.updateCustomerByQuery(customerUpdateQueryRequestDTO.getCustomerName(), customerUpdateQueryRequestDTO.getNic(), id);
+//                return "Customer updated successfully";
+//            } else {
+//                return "Customer not found";
+//            }
+//
+//    }
 
 
 
-}
 
 

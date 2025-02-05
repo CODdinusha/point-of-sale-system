@@ -2,6 +2,7 @@ package com.pos.kuppiya.point_of_sale.controller;
 
 
 import com.pos.kuppiya.point_of_sale.dto.CustomerDTO;
+import com.pos.kuppiya.point_of_sale.dto.request.CostomerUpdateQueryRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerSaveRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerUpdateRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.response.ResposeActiveCustomerDTO;
@@ -72,5 +73,16 @@ public class CustomerController {
         List<ResposeActiveCustomerDTO> getCustomer = customerService.getAllCustomerByActiveStateOnlyName();
         return getCustomer;
     }
-
+//    @PutMapping(path = "/update-query/{id}")
+//    public String updateCustomerByQuery(@RequestBody CostomerUpdateQueryRequestDTO customerUpdateQueryRequestDTO,
+//                                        @PathVariable (value = "id") int id) {
+//        String updated = customerService.updateCustomerByQuery(customerUpdateQueryRequestDTO,id);
+//        return updated;
+//    }
+@PutMapping(path = "/update-query/{id}")
+public String updateCustomerByQuery(@RequestBody CostomerUpdateQueryRequestDTO customerUpdateQueryRequestDTO,
+                                    @PathVariable(value = "id") int id) {
+    String updated = customerService.updateCustomerByQuery(customerUpdateQueryRequestDTO, id);
+    return updated;
+}
 }

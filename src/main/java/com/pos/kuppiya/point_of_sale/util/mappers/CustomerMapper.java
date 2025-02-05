@@ -13,11 +13,6 @@ import java.util.List;
 public interface CustomerMapper {
     CustomerDTO entityToDto(Customer customer);
 
-//    @Mapping(target = "customerName", source = "customer.customerName")
-//    @Mapping(target = "contactNumbers", source = "customer.contactNumbers")
-//    ResposeActiveCustomerDTO entityToResponseActiveCustomerDTO(Customer customer);
     List<CustomerDTO> entityListToDtoList(List<Customer> customers);
 
-
-//    List<ResposeActiveCustomerDTO> entityListToDtoListOnlyName(List<Customer> customers);
 }
