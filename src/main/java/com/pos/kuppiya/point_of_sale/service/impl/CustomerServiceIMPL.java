@@ -3,6 +3,7 @@ import com.pos.kuppiya.point_of_sale.dto.CustomerDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CostomerUpdateQueryRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerSaveRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerUpdateRequestDTO;
+import com.pos.kuppiya.point_of_sale.dto.response.ResponseSalAddCustomerDTO;
 import com.pos.kuppiya.point_of_sale.dto.response.ResposeActiveCustomerDTO;
 import com.pos.kuppiya.point_of_sale.entity.Customer;
 import com.pos.kuppiya.point_of_sale.repo.CustomerRepo;
@@ -180,7 +181,58 @@ public class CustomerServiceIMPL implements CustomerService {
                 return "Customer not found";
             }
         }
+
+    @Override
+    public List<CustomerDTO> getByNic(String nic) throws ClassNotFoundException {
+
+            List<Customer>customers = customerRepo.findByNic(nic);
+
+            if(customers.size()!=0){
+                List<CustomerDTO> customerDTOS = modelMapper.
+                        map(customers, new TypeToken<List<CustomerDTO>>() {
+
+                        }.getType());
+                return customerDTOS;
+            }else{
+                throw new ClassNotFoundException("no results");
+            }
+
+        }
+
+    @Override
+    public ResponseSalAddCustomerDTO getSalAsddById(ResponseSalAddCustomerDTO responseSalAddCustomerDTO, int id) {
+        List<Customer>customers=customerRepo.findByCustomerId(id);
+        return null;
     }
+
+    public List<CustomerDTO> getByNic(String nic) throws ClassNotFoundException {
+
+        List<Customer>customers = customerRepo.findByNic(nic);
+
+        if(customers.size()!=0){
+            List<CustomerDTO> customerDTOS = modelMapper.
+                    map(customers, new TypeToken<List<CustomerDTO>>() {
+
+                    }.getType());
+            return customerDTOS;
+        }else{
+            throw new ClassNotFoundException("no results");
+        }
+
+    }
+//    @Override
+//    public CustomerDTO getCustomerById(int id) {
+//        Optional<Customer> customer = customerRepo.findById(id);
+//        if (customer.isPresent()) {
+////            CustomerDTO customerDTO = modelMapper.map(customer.get(), CustomerDTO.class);
+//            CustomerDTO customerDTO = customerMapper.entityToDto(customer.get());
+//            return customerDTO;
+//        } else {
+//            System.out.println("not available");
+//        }
+//        return null;
+//    }
+}
 
 //        @Override
 //        @Transactional

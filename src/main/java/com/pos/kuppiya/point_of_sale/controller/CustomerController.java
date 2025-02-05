@@ -5,6 +5,7 @@ import com.pos.kuppiya.point_of_sale.dto.CustomerDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CostomerUpdateQueryRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerSaveRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerUpdateRequestDTO;
+import com.pos.kuppiya.point_of_sale.dto.response.ResponseSalAddCustomerDTO;
 import com.pos.kuppiya.point_of_sale.dto.response.ResposeActiveCustomerDTO;
 import com.pos.kuppiya.point_of_sale.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,4 +86,16 @@ public String updateCustomerByQuery(@RequestBody CostomerUpdateQueryRequestDTO c
     String updated = customerService.updateCustomerByQuery(customerUpdateQueryRequestDTO, id);
     return updated;
 }
+    @GetMapping(
+            path = {"/get-by-nic"},
+            params = {"nic"}
+    )
+    public List<CustomerDTO> getCustomerByNic(@RequestParam(value = "nic") String nic) throws ClassNotFoundException {
+        List<CustomerDTO> getCustomer = customerService.getByNic(nic);
+        return getCustomer;
+    }
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseSalAddCustomerDTO getSalAsddById(@PathVariable("id") int id) {
+        return customerService.getSalAsddById(id);
+    }
 }
