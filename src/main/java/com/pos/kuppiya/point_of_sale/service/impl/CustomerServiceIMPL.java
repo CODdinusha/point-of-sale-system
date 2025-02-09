@@ -2,7 +2,9 @@ package com.pos.kuppiya.point_of_sale.service.impl;
 import com.pos.kuppiya.point_of_sale.dto.CustomerDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CostomerUpdateQueryRequestDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerSaveRequestDTO;
+import com.pos.kuppiya.point_of_sale.dto.request.CustomerUpdateNameSalNicDTO;
 import com.pos.kuppiya.point_of_sale.dto.request.CustomerUpdateRequestDTO;
+//import com.pos.kuppiya.point_of_sale.dto.response.ResponseSalAddCustomerDTO;
 import com.pos.kuppiya.point_of_sale.dto.response.ResponseSalAddCustomerDTO;
 import com.pos.kuppiya.point_of_sale.dto.response.ResposeActiveCustomerDTO;
 import com.pos.kuppiya.point_of_sale.entity.Customer;
@@ -15,9 +17,7 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CustomerServiceIMPL implements CustomerService {
@@ -122,129 +122,121 @@ public class CustomerServiceIMPL implements CustomerService {
 
     @Override
     public List<CustomerDTO> getByName(String customerName) throws ClassNotFoundException {
-        List<Customer>customers = customerRepo.findAllByCustomerNameEquals(customerName);
+        List<Customer> customers = customerRepo.findAllByCustomerNameEquals(customerName);
 
-        if(customers.size()!=0){
+        if (customers.size() != 0) {
             List<CustomerDTO> customerDTOS = modelMapper.
                     map(customers, new TypeToken<List<CustomerDTO>>() {
 
                     }.getType());
             return customerDTOS;
-        }else{
+        } else {
             throw new ClassNotFoundException("no results");
         }
 
     }
 
-    @Override
-    public List<CustomerDTO> getAllCustomerByActiveState() throws ClassNotFoundException {
-        List<Customer>customers = customerRepo.findAllByActiveStateEquals(true);
-        if(customers.size()!=0){
-            List<CustomerDTO> customerDTOS = customerMapper.entityListToDtoList(customers);
-
-            return customerDTOS;
-        }else{
-            throw new ClassNotFoundException("No Active Customer Found");
-        }
-
-    }
-
-    @Override
-        public List<ResposeActiveCustomerDTO> getAllCustomerByActiveStateOnlyName() throws ClassNotFoundException {
-            List<Customer> customers = customerRepo.findAllByActiveStateEquals(true);
-            if (!customers.isEmpty()) {
-                return customers.stream()
-                        .map(customer -> new ResposeActiveCustomerDTO(customer.getCustomerName(), customer.getContactNumbers()))
-                        .toList();
-            } else {
-                throw new ClassNotFoundException("No Active Customer Found");
-            }
-
-        }
-
 //    @Override
-//    @Transactional
-//    public String updateCustomerByQuery(CostomerUpdateQueryRequestDTO customerUpdateQueryRequestDTO, int id) {
-//        if(customerRepo.existsById(id)){
-//            customerRepo.updateCustomerByQuery(customerUpdateQueryRequestDTO.getCustomerName(),customerUpdateQueryRequestDTO.getNic(),id);
-//        }
-//        return null;
-//    }
-
-        @Override
-        @Transactional
-        public String updateCustomerByQuery(CostomerUpdateQueryRequestDTO customerUpdateQueryRequestDTO, int id) {
-            if (customerRepo.existsById(id)) {
-                customerRepo.updateCustomerByQuery(customerUpdateQueryRequestDTO.getCustomerName(), customerUpdateQueryRequestDTO.getNic(), id);
-                return "Customer updated successfully";
-            } else {
-                return "Customer not found";
-            }
-        }
-
-    @Override
-    public List<CustomerDTO> getByNic(String nic) throws ClassNotFoundException {
-
-            List<Customer>customers = customerRepo.findByNic(nic);
-
-            if(customers.size()!=0){
-                List<CustomerDTO> customerDTOS = modelMapper.
-                        map(customers, new TypeToken<List<CustomerDTO>>() {
-
-                        }.getType());
-                return customerDTOS;
-            }else{
-                throw new ClassNotFoundException("no results");
-            }
-
-        }
-
-    @Override
-    public ResponseSalAddCustomerDTO getSalAsddById(ResponseSalAddCustomerDTO responseSalAddCustomerDTO, int id) {
-        List<Customer>customers=customerRepo.findByCustomerId(id);
-        return null;
-    }
-
-    public List<CustomerDTO> getByNic(String nic) throws ClassNotFoundException {
-
-        List<Customer>customers = customerRepo.findByNic(nic);
-
-        if(customers.size()!=0){
-            List<CustomerDTO> customerDTOS = modelMapper.
-                    map(customers, new TypeToken<List<CustomerDTO>>() {
-
-                    }.getType());
-            return customerDTOS;
-        }else{
-            throw new ClassNotFoundException("no results");
-        }
-
-    }
-//    @Override
-//    public CustomerDTO getCustomerById(int id) {
-//        Optional<Customer> customer = customerRepo.findById(id);
-//        if (customer.isPresent()) {
-////            CustomerDTO customerDTO = modelMapper.map(customer.get(), CustomerDTO.class);
-//            CustomerDTO customerDTO = customerMapper.entityToDto(customer.get());
-//            return customerDTO;
+//    public List<CustomerDTO> getAllCustomerByActiveState() throws ClassNotFoundException {
+//        List<Customer> customers = customerRepo.findAllByActiveStateEquals(true);
+//        if (customers.size() != 0) {
+//            List<CustomerDTO> customerDTOS = customerMapper.entityListToDtoList(customers);
+//
+//            return customerDTOS;
 //        } else {
-//            System.out.println("not available");
+//            throw new ClassNotFoundException("No Active Customer Found");
 //        }
-//        return null;
-//    }
-}
-
-//        @Override
-//        @Transactional
-//        public String updateCustomerByQuery(CostomerUpdateQueryRequestDTO customerUpdateQueryRequestDTO, int id) {
-//            if (customerRepo.existsById(id)) {
-//                customerRepo.updateCustomerByQuery(customerUpdateQueryRequestDTO.getCustomerName(), customerUpdateQueryRequestDTO.getNic(), id);
-//                return "Customer updated successfully";
-//            } else {
-//                return "Customer not found";
-//            }
 //
 //    }
+    @Override
+    public List<CustomerDTO> getAllCustomerByActiveState() throws ClassNotFoundException {
+        List<Customer> customers = customerRepo.findAllByActiveStateEquals(true);
+//        if (!customers.isEmpty()) {
+//            return customerMapper.entityListToDtoList(customers);
+//        }
+//        return Collections.emptyList();
+        return customerMapper.entityListToDtoList(customers);
+    }
+
+    @Override
+    public List<CustomerDTO> getCustomerByActiveStatus(boolean b) throws ClassNotFoundException {
+        List<Customer> customers = customerRepo.findAllByActiveStateEquals(b);
+        List<CustomerDTO> customerDTOS = customerMapper.entityListToDtoList(customers);
+        return customerDTOS;
+    }
+
+
+    @Override
+    public List<ResposeActiveCustomerDTO> getAllCustomerByActiveStateOnlyName() throws ClassNotFoundException {
+        List<Customer> customers = customerRepo.findAllByActiveStateEquals(true);
+        if (!customers.isEmpty()) {
+            return customers.stream()
+                    .map(customer -> new ResposeActiveCustomerDTO(customer.getCustomerName(), customer.getContactNumbers()))
+                    .toList();
+        } else {
+            throw new NoSuchElementException("No Active Customer Found");
+        }
+
+    }
+
+    @Override
+    @Transactional
+    public String updateCustomerByQuery(CostomerUpdateQueryRequestDTO customerUpdateQueryRequestDTO, int id) {
+        if (customerRepo.existsById(id)) {
+            customerRepo.updateCustomerByQuery(customerUpdateQueryRequestDTO.getCustomerName(), customerUpdateQueryRequestDTO.getNic(), id);
+        }
+        return "Update";
+    }
+
+
+    @Override
+    public List<CustomerDTO> getByNic(String nic) throws ClassNotFoundException {
+
+        List<Customer> customers = customerRepo.findByNic(nic);
+
+        if (customers.size() != 0) {
+            List<CustomerDTO> customerDTOS = modelMapper.
+                    map(customers, new TypeToken<List<CustomerDTO>>() {
+
+                    }.getType());
+            return customerDTOS;
+        } else {
+            throw new ClassNotFoundException("no results");
+        }
+
+    }
+
+    @Override
+    public ResponseSalAddCustomerDTO getSalAddById(int id) throws ClassNotFoundException {
+        List<Customer> customers = customerRepo.findByCustomerId(id);
+
+        if (!customers.isEmpty()) {
+            Customer customer = customers.get(0);
+            ResponseSalAddCustomerDTO response = new ResponseSalAddCustomerDTO();
+            response.setCustomerAddress(customer.getCustomerAddress());
+            response.setSalary(customer.getSalary());
+            return response;
+        } else {
+            throw new ClassNotFoundException("No results found for the given ID.");
+        }
+    }
+
+    @Override
+    public String updateCustomerNameSalaryNicByQuery(CustomerUpdateNameSalNicDTO customerUpdateNameSalNicDTO, int id) {
+        if (customerRepo.existsById(id)) {
+            customerRepo.updateCustomerNameSalaryNicByQuery( customerUpdateNameSalNicDTO.getCustomerName(), customerUpdateNameSalNicDTO.getSalary(), customerUpdateNameSalNicDTO.getNic(), id);
+        }
+        return "Update";
+    }
+
+}
+
+
+
+
+
+
+
 
 
 

@@ -13,6 +13,12 @@ import java.util.List;
 public interface CustomerMapper {
     CustomerDTO entityToDto(Customer customer);
 
-    List<CustomerDTO> entityListToDtoList(List<Customer> customers);
+
+
+
+
+
+//    List<CustomerDTO> entityListToDtoList(List<Customer> customers);
+    List<CustomerDTO> entityListToDtoList(List<Customer> customerList);
 
 }
