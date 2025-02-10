@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @EnableJpaRepositories
@@ -25,7 +26,7 @@ public interface CustomerRepo extends JpaRepository<Customer,Integer>  {
     @Query(value = "update customer set customer_name = ?1,nic = ?2 where customer_id = ?3", nativeQuery = true)
     void updateCustomerByQuery(String customerName, String nic, int id);
 
-    List<Customer> findByNic(String nic);
+    Optional<Customer> findByNic(String nic);
 
     List<Customer> findByCustomerId(int id);
     @Modifying

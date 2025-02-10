@@ -37,7 +37,7 @@ public interface CustomerService {
     String updateCustomerByQuery(CostomerUpdateQueryRequestDTO customerUpdateQueryRequestDTO,int id);
 
 
-    List<CustomerDTO> getByNic(String nic) throws ClassNotFoundException;
+    CustomerDTO getByNic(String nic) throws ClassNotFoundException;
 
     ResponseSalAddCustomerDTO getSalAddById(int id) throws ClassNotFoundException;
 

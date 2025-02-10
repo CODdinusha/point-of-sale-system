@@ -7,8 +7,7 @@ import lombok.*;
 import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 
 public class CustomerDTO {
     private int customerId;

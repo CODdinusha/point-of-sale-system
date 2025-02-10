@@ -89,21 +89,11 @@ public class CustomerController {
         List<CustomerDTO> customerDTOList =customerService.getCustomerByActiveStatus(true);
         return ResponseEntity.ok(customerDTOList);
     }
-
-
-
-
     @GetMapping("/activeCustomers")
     public List<Customer> activeCustomers() throws ClassNotFoundException {
         List<Customer> activeCustomers = customerRepo.findAllByActiveStateEquals(true);
         return activeCustomers;
     }
-
-
-
-
-
-
     @GetMapping(
             path = {"/get-by-active-states-only-name"}
     )
@@ -121,9 +111,9 @@ public class CustomerController {
             path = {"/get-by-nic"},
             params = {"nic"}
     )
-    public List<CustomerDTO> getCustomerByNic(@RequestParam(value = "nic") String nic) throws ClassNotFoundException {
-        List<CustomerDTO> getCustomer = customerService.getByNic(nic);
-        return getCustomer;
+    public CustomerDTO getCustomerByNic(@RequestParam(value = "nic") String nic) throws ClassNotFoundException {
+        CustomerDTO getCustomer = (CustomerDTO) customerService.getByNic(nic);
+        return  getCustomer;
     }
     @GetMapping("get-sal-add-/{id}")
     public ResponseEntity<ResponseSalAddCustomerDTO> getSalAddById(@PathVariable("id") int id) throws ClassNotFoundException {

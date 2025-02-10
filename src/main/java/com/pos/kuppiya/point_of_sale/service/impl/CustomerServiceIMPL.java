@@ -135,26 +135,9 @@ public class CustomerServiceIMPL implements CustomerService {
         }
 
     }
-
-//    @Override
-//    public List<CustomerDTO> getAllCustomerByActiveState() throws ClassNotFoundException {
-//        List<Customer> customers = customerRepo.findAllByActiveStateEquals(true);
-//        if (customers.size() != 0) {
-//            List<CustomerDTO> customerDTOS = customerMapper.entityListToDtoList(customers);
-//
-//            return customerDTOS;
-//        } else {
-//            throw new ClassNotFoundException("No Active Customer Found");
-//        }
-//
-//    }
     @Override
     public List<CustomerDTO> getAllCustomerByActiveState() throws ClassNotFoundException {
         List<Customer> customers = customerRepo.findAllByActiveStateEquals(true);
-//        if (!customers.isEmpty()) {
-//            return customerMapper.entityListToDtoList(customers);
-//        }
-//        return Collections.emptyList();
         return customerMapper.entityListToDtoList(customers);
     }
 
@@ -190,21 +173,27 @@ public class CustomerServiceIMPL implements CustomerService {
 
 
     @Override
-    public List<CustomerDTO> getByNic(String nic) throws ClassNotFoundException {
+    public CustomerDTO getByNic(String nic)  {
 
-        List<Customer> customers = customerRepo.findByNic(nic);
+        Optional<Customer> customer = customerRepo.findByNic(nic);
 
-        if (customers.size() != 0) {
-            List<CustomerDTO> customerDTOS = modelMapper.
-                    map(customers, new TypeToken<List<CustomerDTO>>() {
+            if (customer.isPresent()){
+                CustomerDTO customerDTO = modelMapper.map(customer.get(), CustomerDTO.class);
+                return customerDTO;
+            }
 
-                    }.getType());
-            return customerDTOS;
-        } else {
-            throw new ClassNotFoundException("no results");
-        }
-
+//        if (customers.size() != 0) {
+//            CustomerDTO customerDTOS = modelMapper.
+//                    map(customers, new TypeToken<CustomerDTO>() {
+//
+//                    }.getType());
+//            return (CustomerDTO) customerDTOS;
+//        } else {
+//            throw new ClassNotFoundException("no results");
+//        }
+        return null;
     }
+
 
     @Override
     public ResponseSalAddCustomerDTO getSalAddById(int id) throws ClassNotFoundException {
